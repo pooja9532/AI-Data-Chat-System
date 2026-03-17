@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>AI Data Chat</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right, #667eea, #764ba2);
+}
+
+.container {
+    width: 500px;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    margin-top: 40px;
+}
+
+#chatBox {
+    height: 300px;
+    overflow-y: scroll;
+    border: 1px solid #ccc;
+    padding: 10px;
+}
+
+.user {
+    text-align: right;
+    color: blue;
+}
+
+.bot {
+    text-align: left;
+    color: green;
+}
+
+input {
+    width: 70%;
+    padding: 8px;
+}
+
+button {
+    padding: 8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2 style="text-align:center;">💬 AI Data Chat System</h2>
+<p style="text-align:center;">Team Smart Coders</p>
+
+<div id="chatBox"></div>
+
+<input id="msg" placeholder="Ask anything..." />
+<button onclick="send()">Send</button>
+
+<canvas id="chart"></canvas>
+</div>
+
+<script>
+window.onload = function() {
+    chatBox.innerHTML += `<div class="bot">Hello! Ask about sales 😊</div>`;
+}
+
+async function send() {
+    let msg = document.getElementById("msg").value;
+    if (msg.trim() === "") return;
+
+    chatBox.innerHTML += `<div class="user">${msg}</div>`;
+
+    let res = await fetch(`/chat?user_input=${msg}`);
+    let data = await res.json();
+
+    chatBox.innerHTML += `<div class="bot">${data.bot}</div>`;
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    document.getElementById("msg").value = "";
+
+    if (data.data) {
+        if (window.myChart) window.myChart.destroy();
+
+        let labels = data.data.map(x => x[0]);
+        let values = data.data.map(x => x[1]);
+
+        window.myChart = new Chart(document.getElementById("chart"), {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: "Sales",
+                    data: values
+                }]
+            }
+        });
+    }
+}
+</script>
+
+</body>
+</html>
+
+
