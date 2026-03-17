@@ -63,11 +63,6 @@ It makes data analysis simple, fast, and user-friendly.
 
 ---
 
-## 📸 Screenshots
-(Add your screenshots here after uploading images)
-
----
-
 ## 🔮 Future Scope
 - Add voice input  
 - Use advanced AI models  
